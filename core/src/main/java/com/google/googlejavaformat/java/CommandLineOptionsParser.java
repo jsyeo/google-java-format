@@ -125,6 +125,9 @@ final class CommandLineOptionsParser {
         case "--assume-filename":
           optionsBuilder.assumeFilename(getValue(flag, it, value));
           break;
+        case "--max-line-length":
+          optionsBuilder.maxLineLength(parseInteger(it, flag, value));
+          break;
         default:
           throw new IllegalArgumentException("unexpected flag: " + flag);
       }

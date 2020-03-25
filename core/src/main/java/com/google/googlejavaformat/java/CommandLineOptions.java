@@ -43,6 +43,7 @@ final class CommandLineOptions {
   private final Optional<String> assumeFilename;
   private final boolean reflowLongStrings;
   private final boolean formatJavadoc;
+  private final int maxLineLength;
 
   CommandLineOptions(
       ImmutableList<String> files,
@@ -61,7 +62,8 @@ final class CommandLineOptions {
       boolean setExitIfChanged,
       Optional<String> assumeFilename,
       boolean reflowLongStrings,
-      boolean formatJavadoc) {
+      boolean formatJavadoc,
+      int maxLineLength) {
     this.files = files;
     this.inPlace = inPlace;
     this.lines = lines;
@@ -79,6 +81,7 @@ final class CommandLineOptions {
     this.assumeFilename = assumeFilename;
     this.reflowLongStrings = reflowLongStrings;
     this.formatJavadoc = formatJavadoc;
+    this.maxLineLength = maxLineLength;
   }
 
   /** The files to format. */
@@ -171,6 +174,10 @@ final class CommandLineOptions {
     return formatJavadoc;
   }
 
+  int maxLineLength() {
+    return maxLineLength;
+  }
+
   static Builder builder() {
     return new Builder();
   }
@@ -194,6 +201,7 @@ final class CommandLineOptions {
     private Optional<String> assumeFilename = Optional.empty();
     private boolean reflowLongStrings = true;
     private boolean formatJavadoc = true;
+    private int maxLineLength = 100;
 
     ImmutableList.Builder<String> filesBuilder() {
       return files;
@@ -278,6 +286,11 @@ final class CommandLineOptions {
       return this;
     }
 
+    Builder maxLineLength(int maxLineLength) {
+      this.maxLineLength = maxLineLength;
+      return this;
+    }
+
     CommandLineOptions build() {
       return new CommandLineOptions(
           files.build(),
@@ -296,7 +309,8 @@ final class CommandLineOptions {
           setExitIfChanged,
           assumeFilename,
           reflowLongStrings,
-          formatJavadoc);
+          formatJavadoc,
+          maxLineLength);
     }
   }
 }

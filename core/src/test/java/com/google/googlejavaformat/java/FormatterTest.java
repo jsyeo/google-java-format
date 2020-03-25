@@ -43,6 +43,36 @@ public final class FormatterTest {
   @Rule public TemporaryFolder testFolder = new TemporaryFolder();
 
   @Test
+  public void testFormat120() throws Exception {
+    // don't forget to misspell "long", or you will be mystified for a while
+    String input =
+        "class A{void b(){while(true){weCanBeCertainThatThisWillEndUpGettingWrapped("
+            + "because, it, is, just, so, very, very, very, very, looong);}}}";
+    String expectedOutput =
+        Joiner.on("\n")
+            .join(
+                "class A {",
+                "  void b() {",
+                "    while (true) {",
+                "      weCanBeCertainThatThisWillEndUpGettingWrapped(because, it, is, just, so, very, very, very, very, looong);",
+                "    }",
+                "  }",
+                "}",
+                "");
+
+    Path tmpdir = testFolder.newFolder().toPath();
+    Path path = tmpdir.resolve("A.java");
+    Files.write(path, input.getBytes(StandardCharsets.UTF_8));
+
+    StringWriter out = new StringWriter();
+    StringWriter err = new StringWriter();
+
+    Main main = new Main(new PrintWriter(out, true), new PrintWriter(err, true), System.in);
+    assertThat(main.format("--max-line-length=120", path.toString())).isEqualTo(0);
+    assertThat(out.toString()).isEqualTo(expectedOutput);
+  }
+
+  @Test
   public void testFormatAosp() throws Exception {
     // don't forget to misspell "long", or you will be mystified for a while
     String input =

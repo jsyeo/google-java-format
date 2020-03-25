@@ -49,10 +49,12 @@ public class JavaFormatterOptions {
 
   private final Style style;
   private final boolean formatJavadoc;
+  private final int maxLineLength;
 
-  private JavaFormatterOptions(Style style, boolean formatJavadoc) {
+  private JavaFormatterOptions(Style style, boolean formatJavadoc, int maxLineLength) {
     this.style = style;
     this.formatJavadoc = formatJavadoc;
+    this.maxLineLength = maxLineLength;
   }
 
   /** Returns the multiplier for the unit of indent. */
@@ -69,6 +71,10 @@ public class JavaFormatterOptions {
     return style;
   }
 
+  public int maxLineLength() {
+    return maxLineLength;
+  }
+
   /** Returns the default formatting options. */
   public static JavaFormatterOptions defaultOptions() {
     return builder().build();
@@ -83,6 +89,7 @@ public class JavaFormatterOptions {
   public static class Builder {
     private Style style = Style.GOOGLE;
     private boolean formatJavadoc = true;
+    private int maxLineLength = 100;
 
     private Builder() {}
 
@@ -96,8 +103,13 @@ public class JavaFormatterOptions {
       return this;
     }
 
+    Builder maxLineLength(int maxLineLength) {
+      this.maxLineLength = maxLineLength;
+      return this;
+    }
+
     public JavaFormatterOptions build() {
-      return new JavaFormatterOptions(style, formatJavadoc);
+      return new JavaFormatterOptions(style, formatJavadoc, maxLineLength);
     }
   }
 }
